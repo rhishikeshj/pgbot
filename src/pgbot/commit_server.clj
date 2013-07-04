@@ -8,10 +8,11 @@
   "Generates a Ring handler to post commits to the connection."
   [connection]
   (api (routes
-         (POST "/" [user-name commit-message repo branch sha]
+         (POST "/" [user-name commit-message repo branch sha files]
            (let [message
                  (str user-name " in " repo "/" branch ": \""
-                      commit-message"\" (" sha ")")]
+                        commit-message"\" (" sha ") changed files "
+                        (clojure.string/replace files "\n" ":: "))]
              (pgbot.events/trigger
                connection
                :outgoing
